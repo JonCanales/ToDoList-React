@@ -3,15 +3,19 @@ import TodoItems from "./TodoItems";
 import "./TodoList.css";
 
 class TodoList extends Component {
+    // need props arugment for a class with a state
     constructor(props){
+        //Registers class as a react component. Need it for a componenet that has a state
         super(props);
         // Our intial state for our todo list 
+        // We initialize our state when we create the component at top
         this.state = {
         //Empty array to put our tasks into 
         items: []
         };
-
+        // When instance is created the function will be binded to "this" of the instance
         this.addItem = this.addItem.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
     }
 
     //  e = event argument 
@@ -30,15 +34,19 @@ class TodoList extends Component {
             //prevState 
             this.setState((prevState) => {
                 return{
+                    //prevState is just the states previous state it was in 
+                    //The previous state and the current state concat into a brand new array with the new item in it.
                     items: prevState.items.concat(newItem)
                 }
             }
 
 
             );
-
+            // Here the new items for the Todo List will be shown to the console
+            console.log(this.state.items);
         }
-
+        
+        
         
 
         // Creates a new object named newItem and gives it a text key pair values
@@ -49,6 +57,18 @@ class TodoList extends Component {
         e.preventDefault();
         
       }
+      
+      
+      deleteItem(key){
+        
+        var filteredItems = this.state.items.filter(function (item){
+            return (item.key !== key)
+        });
+        
+        this.setState({
+            items: filteredItems
+        });
+    }
     render() {
         return (
             <div className="todoListMain">
@@ -69,7 +89,11 @@ class TodoList extends Component {
             <button type="submit">Add</button>
             </form>
             </div>
-            <TodoItems entries={this.state.items}/>
+            {/* Here the new items for the Todo List will be shown to the user 
+                and allow us to delete them as well */}
+            <TodoItems entries={this.state.items}
+                        delete={this.deleteItem}/>
+
             </div>
         );
     }
